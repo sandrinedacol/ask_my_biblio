@@ -41,7 +41,7 @@ def store_embeddings(chunks, vector_store):
     return vector_store
 
 
-def store_document(filenames=None, db_name='biblio'):
+def store_document(filenames=None, db_name='biblio', reset_pkl=True):
     vector_store = load_vector_store(db_name)
     files_path = get_files_path(filenames)
     n_chunks = 0

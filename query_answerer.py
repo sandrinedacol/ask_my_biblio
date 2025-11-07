@@ -31,19 +31,19 @@ class BasicAnswerer(Answerer):
 
     def answer(self, query):
         retrieved_docs = select_relevant_chunks(query)
-        docs_content = "\n\n".join(f"file {doc.metadata['source']}, page {doc.metadata['page']+1} : {doc.page_content}" for i, doc in enumerate(retrieved_docs))
+        docs_content = "\n\n".join(f"file {doc.metadata['source'].split('/')[-1]}, page {doc.metadata['page']+1} : {doc.page_content}" for i, doc in enumerate(retrieved_docs))
         system_message = (
             "You are a helpful assistant. Use the following context in your response:"
             f"\n\n{docs_content}"
             "Provide the name of the file(s) and the page(s) where you found the information, using the following formulation:"
-            '''"Information found in <file_name> on page <page_number>."'''
+            '''"(information found in <file_name> on page <page_number>)"'''
         )
         messages = [
             ("system", system_message),
             ('human', query)
         ]
         ai_msg = self.llm.invoke(messages)
-        print(ai_msg.text)
+        return ai_msg.text
 
 
 @dynamic_prompt
@@ -64,12 +64,14 @@ class AgenticAnswerer(Answerer):
 
     def answer(self, query):
         agent = create_agent(self.llm, tools=[], middleware=[prompt_with_context])
+        messages = []
         for event in agent.stream(
             {"messages": [{"role": "user", "content": query}]},
             stream_mode="values",
         ):
             event["messages"][-1].pretty_print()
-
+            messages.append(event["messages"][-1])
+        return messages[-1].content
 
 
 if __name__ == "__main__":
@@ -82,5 +84,5 @@ if __name__ == "__main__":
         "What material is deposited during ALD?"
     ]
     query = queries[3]
-    answerer = AgenticAnswerer()
+    answerer = BasicAnswerer()
     answerer.answer(query)

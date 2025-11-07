@@ -3,6 +3,9 @@ db/
 uv.lock
 .vscode
 test_query_chunk_pairs.pkl
+phoenix_test.py
+chainlit.md
+.chainlit/
 
 
 
