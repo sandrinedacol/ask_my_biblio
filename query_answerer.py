@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 if "GOOGLE_API_KEY" not in os.environ:
-    raise Exception('Set your Google API key in your .env')
+    raise Exception('Set your Google API key in a .env file')
 # Generate or retrieve yout API key:
 # https://aistudio.google.com/app/api-keys?hl=fr
 # see
