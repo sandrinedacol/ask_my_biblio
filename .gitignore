@@ -2,6 +2,7 @@ db/
 .python-version
 uv.lock
 .vscode
+test_query_chunk_pairs.pkl
 
 
 
