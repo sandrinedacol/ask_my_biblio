@@ -14,6 +14,14 @@ if "GOOGLE_API_KEY" not in os.environ:
 # see
 # https://ai.google.dev/gemini-api/docs/api-key
 
+from phoenix.otel import register
+tracer_provider = register(
+    project_name="my-llm-app",
+    auto_instrument=True,
+)
+tracer = tracer_provider.get_tracer(__name__)
+# lancer uv run phoenix serve pour monitorer le truc en local
+
 
 class Answerer():
 
@@ -84,5 +92,5 @@ if __name__ == "__main__":
         "What material is deposited during ALD?"
     ]
     query = queries[3]
-    answerer = BasicAnswerer()
+    answerer = AgenticAnswerer()
     answerer.answer(query)
