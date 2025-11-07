@@ -23,28 +23,8 @@ class Answerer():
             temperature=0,
             max_tokens=None,
             timeout=None,
-            max_retries=2,
-            google_api_key=self.get_api_key()
+            max_retries=2
         )
-    
-    def get_api_key(self):
-        keys_dir = 'api_keys'
-        file = f'{keys_dir}/google.txt'
-        if os.path.isfile(file):
-            with open(file, 'r') as f:
-                api_key = f.read()
-        else:
-            if not os.path.exists(keys_dir):
-                os.makedirs(keys_dir)
-                with open('.gitignore', 'r') as f:
-                    gitignore_content = f.read()
-                gitignore_content = f'{keys_dir}/\n{gitignore_content}'
-                with open('.gitignore', 'w') as f:
-                    f.write(gitignore_content)
-            api_key = getpass.getpass("Enter API key for Google Gemini: ")
-            with open(file, 'w') as f:
-                f.write(api_key)
-        return api_key
 
 
 class BasicAnswerer(Answerer):
